@@ -60,16 +60,41 @@ $(function() {
         });
     });
 
+    describe('Initial Entries', function() {
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+        beforeEach(function(done) {
+            loadFeed(0, done);
+        });
 
-    /* TODO: Write a test that ensures when the loadFeed
-     * function is called and completes its work, there is at least
-     * a single .entry element within the .feed container.
-     * Remember, loadFeed() is asynchronous so this test wil require
-     * the use of Jasmine's beforeEach and asynchronous done() function.
-     */
+        it('exist after loadFeed is called', function(done) {
+            expect($('.feed').find('article.entry').length).toBeGreaterThan(0);
+            done();
+        });
+    });
 
+    describe('New Feed Selection', function() {
+
+        var oldFeedName, oldArticle;
+        beforeEach(function(done) {
+            originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+            loadFeed(0, function() {
+                oldFeedName = $('.header-title');
+                oldArticle = $('article.entry h2').html();
+                loadFeed(1, done);
+            });
+        });
+
+        it('changes the page content', function(done) {
+            expect($('.header-title')).not.toBe(oldFeedName);
+            expect($('article.entry h2').html()).not.toBe(oldArticle);
+            done();
+        });
+
+        afterEach(function() {
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+        });
+    });
     /* TODO: Write a new test suite named "New Feed Selection"
 
         /* TODO: Write a test that ensures when a new feed is loaded
