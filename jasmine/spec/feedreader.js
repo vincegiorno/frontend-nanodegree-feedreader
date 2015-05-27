@@ -70,20 +70,41 @@ $(function() {
             originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
             loadFeed(0, function() {
-                oldFeedName = $('.header-title');
-                oldArticle = $('article.entry h2').html();
+                oldFeedName = $('.header-title').text();
+                oldArticle = $('article.entry h2').text();
                 loadFeed(1, done);
             });
         });
 
         it('changes the page content', function(done) {
-            expect($('.header-title')).not.toBe(oldFeedName);
-            expect($('article.entry h2').html()).not.toBe(oldArticle);
+            expect($('.header-title').text()).not.toBe(oldFeedName);
+            expect($('article.entry h2').text()).not.toBe(oldArticle);
             done();
         });
 
         afterEach(function() {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+        });
+    });
+
+    describe('Delete Feed', function() {
+
+        beforeEach(function(done) {
+            loadFeed(0, done);
+        });
+
+        it('deletes a feed and reloads if necessary', function(done) {
+            var oldFeedName = allFeeds[0].name;
+            var oldLength = allFeeds.length;
+            $('li a').eq(0).next('button').click();
+            setTimeout(function(done) {
+                expect(allFeeds.length).toEqual(oldLength - 1);
+                expect($('.header-title').text()).toBe(allFeeds[0].name);
+                for (var i = allFeeds.length - 1; i >= 0; i--) {
+                    expect(allFeeds[i].name).not.toBe(oldFeedName);
+                }
+                done();
+            }, 1000);
         });
     });
 
