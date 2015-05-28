@@ -120,8 +120,9 @@ $(function() {
 
         /* addFeed is modeled on loadFeed, so the optional callback can be used for
         the done() function. Test to see that the new feed data has been stored in
-        allFeeds, that the titl of the displayed feed is the name of the new feed
-        and articles have been loaded. */
+        allFeeds, that the title of the displayed feed is the name of the new feed
+        and articles have been loaded. The length of allFeeds before the new feed
+        is added will be the same as the index of the new feed. */
         var newFeed = 'NewFeed';
         var newUrl = 'Url';
         var newLength = allFeeds.length;
